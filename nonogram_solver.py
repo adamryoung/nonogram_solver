@@ -40,6 +40,7 @@ def generate_nonogram_grid():
     nonogram = np.zeros((5, 5), dtype=int)
     return(nonogram)
 
+
 def nonogram_empty_full(col_counters, row_counters, nonogram): 
     for i in range(5):
         if col_counters[i] == [0]:
@@ -56,9 +57,18 @@ def nonogram_empty_full(col_counters, row_counters, nonogram):
     return(nonogram)
 
 
-
-            
-
+def nonogram_counter_space(col_counters, row_counters, nonogram):
+    for i in range(5):
+        if 5 - (sum(col_counters[i]) + len(col_counters[i]) - 1) == 0:
+            index = 0
+            for counter in col_counters[i]:
+                for n in range(counter):
+                    nonogram[index, i] = 1
+                    index += 1
+                if index < 4:
+                    nonogram[index, i] = 2
+                    index += 1
+    return(nonogram)
 
 
 if __name__ == "__main__":
@@ -69,5 +79,6 @@ if __name__ == "__main__":
     # solved from this input data.
     nonogram = generate_nonogram_grid()
     nonogram = nonogram_empty_full(col_counters, row_counters, nonogram)
-
+    nonogram = nonogram_counter_space(col_counters, row_counters, nonogram)
+    print(nonogram)
 
