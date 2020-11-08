@@ -16,5 +16,6 @@ Running Instructions:
   
   
 Nonogram File Format (from gram1.txt):
+
 The counters for the columns are specified in the first line, and the second line specifies the counters for the rows of the nanogram.
 For each line the rows/columns are separated by a comma, and multiple numbers for a single row/column are separated with a space.
