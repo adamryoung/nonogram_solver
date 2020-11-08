@@ -107,7 +107,7 @@ def nonogram_counter_space(col_counters, row_counters, nonogram):
                 if index_row < 4:
                     nonogram[i, index_row] = 2
                     index_row += 1
-    #nonogram = nonogram_checker(col_counters, row_counters, nonogram)
+    nonogram = nonogram_checker(col_counters, row_counters, nonogram)
     return(nonogram)
 
 
@@ -181,8 +181,6 @@ if __name__ == "__main__":
     nonogram = generate_nonogram_grid()
     nonogram = nonogram_empty_full(col_counters, row_counters, nonogram)
     nonogram = nonogram_counter_space(col_counters, row_counters, nonogram)
-    #nonogram = nonogram_3or4(col_counters, row_counters, nonogram)
-    #nonogram = bufferer(col_counters, row_counters, nonogram)
+    nonogram = nonogram_3or4(col_counters, row_counters, nonogram)
+    nonogram = bufferer(col_counters, row_counters, nonogram)
     drawing(nonogram)
-
-    
