@@ -1,6 +1,7 @@
 # nonogram_solver.py
 import sys
 import numpy as np
+from PIL import Image
 
 
 def read_command_line():
@@ -22,6 +23,13 @@ def read_nonogram(filename):
     and formats it into a list of lists for both the x and y counters.
     The counters are the numbers that indicate the number of activated pixels
     in each row (y) and each column (x).
+    Variables:
+    - x0, x1, xf and y0, y1, yf are iterations of the data as it is formatted.
+    - xf, and yf are the final outputs which will equal col_counters, and
+    row_counters, respectively, for the remainder of the program.
+    e.g. A value of col_counters[1] = [1, 2] indicates that the second column
+    contains a sequence of 1 consecutive active pixel, followed by 2 consecutive
+    active pixels.
     """
     file = open(filename)
     (x0, y0) = file.read().split('\n')
@@ -34,31 +42,51 @@ def read_nonogram(filename):
         xf += [[int(j) for j in x1[i].split()]]
     for i in range(len(y1)):
         yf += [[int(j) for j in y1[i].split()]]
-    return(xf, yf)
+    return(xf, yf)  # outputs to (col_counters, row_counters)
 
 
 def generate_nonogram_grid():
+    """
+    Creates a 5 by 5 matrix to represent the working solution for the nonogram.
+    Where a 0 in the matrix represents an empty square that is undetermined, a 
+    1 represents a filled in square, and a 2 represents a crossed out sqaure.
+    On initialization all squares will be 0 (undetermined).
+    """
     nonogram = np.zeros((5, 5), dtype=int)
     return(nonogram)
 
 
-def nonogram_empty_full(col_counters, row_counters, nonogram): 
+def nonogram_empty_full(col_counters, row_counters, nonogram):
+    """
+    Detects any rows or columns that are either completely full (counter = 5),
+    or completely empty (counter = 0) and fills them with 1s and 2s, respectiv-
+    ely. This handles the typical first step when solving a nonogram where you
+    fill in the "obvious" rows and columns because they are either all X's or
+    all filled in.
+    """
     for i in range(5):
-        if col_counters[i] == [0]:
+        if col_counters[i] == [0]:  # column with 0 filled
             nonogram[:, i] = [2]
     for j in range(5):
-        if row_counters[j] == [0]:
+        if row_counters[j] == [0]:  # row with 0 filled
             nonogram[j, :] = [2]
     for i in range(5):
-        if col_counters[i] == [5]:
+        if col_counters[i] == [5]:  # column with all 5 filled
             nonogram[:, i] = [1]
     for j in range(5):
-        if row_counters[j] == [5]:
+        if row_counters[j] == [5]:  # row with all 5 filled
             nonogram[j, :] = [1]
     return(nonogram)
 
 
 def nonogram_counter_space(col_counters, row_counters, nonogram):
+    """
+    Any row or column that requires five spaces to be filled, but only in the
+    case where there are multiple numbers in counter for that row/col.
+    e.g. col_counters[2] = [2, 2] <- in this case there must be five spaces to
+    fill this in since an X must be inbetween the two 2's. The same applies for
+    a row or column with [3, 1], [1, 3], or [1, 1, 1] as its counters.
+    """
     for i in range(5):
         if 5 - (sum(col_counters[i]) + len(col_counters[i]) - 1) == 0:
             index = 0
@@ -84,6 +112,8 @@ def nonogram_counter_space(col_counters, row_counters, nonogram):
 def bufferer(col_counters, row_counters, nonogram):
     for i in range(5):
         # check for completed part of counter in a single column.
+        # if nonogram[:, i].tolist()
+    return(nonogram)
 
 
 if __name__ == "__main__":
@@ -95,5 +125,5 @@ if __name__ == "__main__":
     nonogram = generate_nonogram_grid()
     nonogram = nonogram_empty_full(col_counters, row_counters, nonogram)
     nonogram = nonogram_counter_space(col_counters, row_counters, nonogram)
-    monogram = bufferer(col_counters, row_counters, nonogram)
+    nonogram = bufferer(col_counters, row_counters, nonogram)
     print(nonogram)
