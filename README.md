@@ -1,8 +1,10 @@
 Nonogram Puzzle Solver - HackED Beta 2020
 by Adam Young and Nolan Shaw
 
+
 Description:
 Solves some, but definitely not all, 5x5 nonograms.
+
 
 Running Instructions:
 1. Download nonogram_solver.py, and gram1.txt into the same directory
@@ -12,6 +14,7 @@ Running Instructions:
    - This will run and solve the nanogram in gram1.txt by default or from the file specified in the optional command line argument.
    - The solved (or partially solved) nanogram will open in a separate pygame window
   
-Nonogram File Format (from gram1.txt)
+  
+Nonogram File Format (from gram1.txt):
 The counters for the columns are specified in the first line, and the second line specifies the counters for the rows of the nanogram.
 For each line the rows/columns are separated by a comma, and multiple numbers for a single row/column are separated with a space.
