@@ -41,6 +41,22 @@ def generate_nonogram_grid():
     return(nonogram)
 
 
+def nonogram_empty_full(col_counters, row_counters, nonogram): 
+    for i in range(5):
+        if col_counters[i] == [0]:
+            nonogram[:, i] = [2]
+    for j in range(5):
+        if row_counters[j] == [0]:
+            nonogram[j, :] = [2]
+    for i in range(5):
+        if col_counters[i] == [5]:
+            nonogram[:, i] = [1]
+    for j in range(5):
+        if row_counters[j] == [5]:
+            nonogram[j, :] = [1]
+    return(nonogram)
+
+
 def nonogram_counter_space(col_counters, row_counters, nonogram):
     for i in range(5):
         if 5 - (sum(col_counters[i]) + len(col_counters[i]) - 1) == 0:
@@ -62,5 +78,7 @@ if __name__ == "__main__":
     # grid, and row_counters does the same for the rows. The nonogram will be
     # solved from this input data.
     nonogram = generate_nonogram_grid()
-    nonogram_counter_space(col_counters, row_counters, nonogram)
+    nonogram = nonogram_empty_full(col_counters, row_counters, nonogram)
+    nonogram = nonogram_counter_space(col_counters, row_counters, nonogram)
     print(nonogram)
+
