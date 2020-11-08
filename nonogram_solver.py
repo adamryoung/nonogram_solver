@@ -25,6 +25,7 @@ def read_nonogram(filename):
     """
     file = open(filename)
     (x0, y0) = file.read().split('\n')
+    file.close()
     x1 = x0.split(',')
     y1 = y0.split(',')
     xf = []
@@ -62,13 +63,27 @@ def nonogram_counter_space(col_counters, row_counters, nonogram):
         if 5 - (sum(col_counters[i]) + len(col_counters[i]) - 1) == 0:
             index = 0
             for counter in col_counters[i]:
-                for n in range(counter):
+                for _ in range(counter):
                     nonogram[index, i] = 1
                     index += 1
                 if index < 4:
                     nonogram[index, i] = 2
                     index += 1
+        if 5 - (sum(row_counters[i]) + len(row_counters[i]) - 1) == 0:
+            index = 0
+            for counter in row_counters[i]:
+                for _ in range(counter):
+                    nonogram[i, index] = 1
+                    index += 1
+                if index < 4:
+                    nonogram[i, index] = 2
+                    index += 1
     return(nonogram)
+
+
+def bufferer(col_counters, row_counters, nonogram):
+    for i in range(5):
+        # check for completed part of counter in a single column.
 
 
 if __name__ == "__main__":
@@ -80,5 +95,5 @@ if __name__ == "__main__":
     nonogram = generate_nonogram_grid()
     nonogram = nonogram_empty_full(col_counters, row_counters, nonogram)
     nonogram = nonogram_counter_space(col_counters, row_counters, nonogram)
+    monogram = bufferer(col_counters, row_counters, nonogram)
     print(nonogram)
-
