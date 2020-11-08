@@ -90,24 +90,24 @@ def nonogram_counter_space(col_counters, row_counters, nonogram):
     """
     for i in range(5):
         if 5 - (sum(col_counters[i]) + len(col_counters[i]) - 1) == 0:
-            index = 0
+            index_col = 0
             for counter in col_counters[i]:
                 for _ in range(counter):
-                    nonogram[index, i] = 1
-                    index += 1
-                if index < 4:
-                    nonogram[index, i] = 2
-                    index += 1
+                    nonogram[index_col, i] = 1
+                    index_col += 1
+                if index_col < 4:
+                    nonogram[index_col, i] = 2
+                    index_col += 1
         if 5 - (sum(row_counters[i]) + len(row_counters[i]) - 1) == 0:
-            index = 0
+            index_row = 0
             for counter in row_counters[i]:
                 for _ in range(counter):
-                    nonogram[i, index] = 1
-                    index += 1
-                if index < 4:
-                    nonogram[i, index] = 2
-                    index += 1
-    nonogram = nonogram_checker(col_counters, row_counters, nonogram)
+                    nonogram[i, index_row] = 1
+                    index_row += 1
+                if index_row < 4:
+                    nonogram[i, index_row] = 2
+                    index_row += 1
+    #nonogram = nonogram_checker(col_counters, row_counters, nonogram)
     return(nonogram)
 
 
@@ -143,18 +143,7 @@ def nonogram_checker(col_counters, row_counters, nonogram):
     return(nonogram)
 
 
-if __name__ == "__main__":
-    filename = read_command_line()
-    (col_counters, row_counters) = read_nonogram(filename)
-    # col_counters counts the number of activated pixels in each column of the
-    # grid, and row_counters does the same for the rows. The nonogram will be
-    # solved from this input data.
-    nonogram = generate_nonogram_grid()
-    nonogram = nonogram_empty_full(col_counters, row_counters, nonogram)
-    nonogram = nonogram_counter_space(col_counters, row_counters, nonogram)
-    nonogram = nonogram_3or4(col_counters, row_counters, nonogram)
-    nonogram = bufferer(col_counters, row_counters, nonogram)
-
+def drawing(nonogram):
     pg.init()
     display = pg.display.set_mode((500,500),0,32)
     WHITE = (255, 255, 255)
@@ -181,3 +170,19 @@ if __name__ == "__main__":
                 pg.quit()
                 sys.exit()
         pg.display.update()
+
+
+if __name__ == "__main__":
+    filename = read_command_line()
+    (col_counters, row_counters) = read_nonogram(filename)
+    # col_counters counts the number of activated pixels in each column of the
+    # grid, and row_counters does the same for the rows. The nonogram will be
+    # solved from this input data.
+    nonogram = generate_nonogram_grid()
+    nonogram = nonogram_empty_full(col_counters, row_counters, nonogram)
+    nonogram = nonogram_counter_space(col_counters, row_counters, nonogram)
+    #nonogram = nonogram_3or4(col_counters, row_counters, nonogram)
+    #nonogram = bufferer(col_counters, row_counters, nonogram)
+    drawing(nonogram)
+
+    
