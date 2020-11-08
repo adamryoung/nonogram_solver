@@ -8,7 +8,7 @@ Running Instructions:
 1. Download nonogram_solver.py, and gram1.txt into the same directory
 2. Have the latest version of python installed with numpy and pygame libraries.
 3. Open the terminal and navigate to the directory where nonogram_solver.py and gram1.txt are located.
-4. Type "python nanogram_solver.py <optional-alternate-nanogram-filename-argument>"
+4. Type "python nanogram_solver.py [optional-alternate-nanogram-filename-argument]"
    - This will run and solve the nanogram in gram1.txt by default or from the file specified in the optional command line argument.
   
 Nonogram File Format (from gram1.txt)
