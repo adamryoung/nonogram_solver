@@ -1,8 +1,7 @@
 # nonogram_solver.py
 import sys
 import numpy as np
-from PIL import Image
-
+import pygame as pg
 
 def read_command_line():
     """
@@ -76,7 +75,9 @@ def nonogram_empty_full(col_counters, row_counters, nonogram):
     for j in range(5):
         if row_counters[j] == [5]:  # row with all 5 filled
             nonogram[j, :] = [1]
+    nonogram = nonogram_checker(col_counters, row_counters, nonogram)
     return(nonogram)
+
 
 
 def nonogram_counter_space(col_counters, row_counters, nonogram):
@@ -106,13 +107,39 @@ def nonogram_counter_space(col_counters, row_counters, nonogram):
                 if index < 4:
                     nonogram[i, index] = 2
                     index += 1
+    nonogram = nonogram_checker(col_counters, row_counters, nonogram)
     return(nonogram)
+
+
+def nonogram_3or4(col_counters, row_counters, nonogram):
+    for i in range(5):
+        if col_counters[i] == [3]:
+            nonogram[2, i] = 1
+        if row_counters[i] == [3]:
+            nonogram[i, 2] = 1
+        if col_counters[i] == [4]:
+            nonogram[1:4, i] = [1]
+        if row_counters[i] == [4]:
+            nonogram[i, 1:4] = [1]
+    return(nonogram_checker(col_counters, row_counters, nonogram))
 
 
 def bufferer(col_counters, row_counters, nonogram):
     for i in range(5):
         # check for completed part of counter in a single column.
         # if nonogram[:, i].tolist()
+        return(nonogram)
+
+
+def nonogram_checker(col_counters, row_counters, nonogram):
+    for i in range(5):
+        if sum(col_counters[i]) == nonogram[:, i].tolist().count(1):
+            nonogram[:, i] = [2 if x == 0 else x for x in nonogram[:, i]]
+        if sum(row_counters[i]) == nonogram[i, :].tolist().count(1):
+            nonogram[i, :] = [2 if x == 0 else x for x in nonogram[i, :]]
+    if np.count_nonzero(nonogram == 0) == 0:
+        print(nonogram)
+        print("Wowza!")
     return(nonogram)
 
 
@@ -125,5 +152,32 @@ if __name__ == "__main__":
     nonogram = generate_nonogram_grid()
     nonogram = nonogram_empty_full(col_counters, row_counters, nonogram)
     nonogram = nonogram_counter_space(col_counters, row_counters, nonogram)
+    nonogram = nonogram_3or4(col_counters, row_counters, nonogram)
     nonogram = bufferer(col_counters, row_counters, nonogram)
-    print(nonogram)
+
+    pg.init()
+    display = pg.display.set_mode((500,500),0,32)
+    WHITE = (255, 255, 255)
+    GRAY = (120, 120, 120)
+    BLACK = (0, 0, 0)
+
+    display.fill(WHITE)
+
+    for i in range(5):
+        for j in range(5):
+            if nonogram[j, i] == 0:
+                pg.draw.rect(display, GRAY, (100 * i, 100 * j, 100, 100))
+                pg.draw.rect(display, BLACK, (100 * i, 100 * j, 100, 100), width = 1)
+            elif nonogram[j, i] == 1:
+                pg.draw.rect(display, BLACK, (100 * i, 100 * j, 100, 100))
+                pg.draw.rect(display, BLACK, (100 * i, 100 * j, 100, 100), width = 1)
+            elif nonogram[j, i] == 2:
+                pg.draw.rect(display, WHITE, (100 * i, 100 * j, 100, 100))
+                pg.draw.rect(display, BLACK, (100 * i, 100 * j, 100, 100), width = 1)
+
+    while True:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                sys.exit()
+        pg.display.update()
